@@ -1,0 +1,230 @@
+1 Gestion des clients
+
+Fonctionnalites :
+
+Creation, modification et suppression des fiches clients
+
+Historique des appareils confies par chaque client 
+
+
+Roles associes :
+
+Administrateur : Acces complet a la gestion des clients
+
+Client : Consultation de son propre profil et historique via le front-office
+
+
+---
+
+2 Gestion des appareils
+
+Fonctionnalites :
+
+Enregistrement des appareils apportes par les clients 
+
+Suivi des informations detaillees des appareils (marque, modele, numero de serie, description du probleme)
+
+Historique des interventions pour chaque appareil
+
+
+Roles associes :
+
+Administrateur : Consultation et gestion globale des appareils
+
+Receptionniste : Enregistrement et mise a jour des informations des appareils
+
+Technicien : Consultation des appareils assignes et ajout de notes techniques
+
+Client : Consultation des appareils qu’il a confies a l’atelier
+
+
+
+---
+
+3 Gestion des reparations
+
+Fonctionnalites :
+
+
+Gestion des statuts des reparations (en attente, en cours, termine, annule)
+
+Suivi des etapes de reparation (diagnostic, intervention, test)
+
+Attribution des reparations aux techniciens
+
+Gestion des pieces detachees utilisees pour chaque reparation
+
+Suivi des delais et alertes pour les reparations en retard
+
+
+Roles associes :
+
+Administrateur : Vue globale sur toutes les reparations et gestion des assignations
+
+
+Technicien : Mise a jour du statut des reparations et ajout de commentaires techniques
+
+Client : Suivi en temps reel du statut de ses reparations via le front-office
+
+
+
+---
+
+4 Gestion des techniciens
+
+Fonctionnalites :
+
+Creation et gestion des profils des techniciens (nom, competences, disponibilite)
+
+Attribution des tâches de reparation aux techniciens
+
+Suivi des performances (temps moyen de reparation, nombre de reparation termines)
+
+
+Roles associes :
+
+Administrateur : Gestion complete des profils et performances des techniciens
+
+Technicien : Consultation de son propre profil et des tâches qui lui sont assignees
+
+
+
+---
+
+5 Gestion factures
+
+Fonctionnalites :
+
+Envoi des factures aux clients
+
+Gestion des paiements (encaisses, en attente)
+
+Roles associes :
+
+Administrateur : Suivi et gestion complete des factures
+
+Client : Consultation et paiement des factures via front-office
+
+---
+
+6 etat de stock
+
+Fonctionnalites :
+
+Enregistrement et suivi des pieces detachees et consommables
+
+Notifications pour les stocks bas
+
+Gestion des commandes de pieces
+
+
+Roles associes :
+
+Administrateur : Gestion globale des stocks et commandes
+
+Technicien : Consultation des stocks disponibles pour les reparations
+
+
+
+---
+
+7 Communication avec les clients
+
+Fonctionnalites :
+
+Envoi d’alertes et de notifications aux clients (par front-office) :
+
+Confirmation de reception de l’appareil
+
+Avancement des reparations
+
+Appareil pret a etre recupere
+
+Relances pour les paiements ou la recuperation des appareils
+
+
+Front-Office pour suivre l’etat de la reparation en ligne
+
+
+Roles associes :
+
+Receptionniste : Gestion des communications avec les clients
+
+Client : Reception des notifications et acces au portail de suivi
+
+---
+
+8 Rapports et statistiques
+
+Fonctionnalites :
+
+Statistiques sur le nombre de reparations par mois, type d’appareil, technicien, etc
+
+Analyse des performances des techniciens
+
+Historique financier : revenus generes, depenses en pieces detachees
+
+
+Roles associes :
+
+Administrateur : Acces complet a tous les rapports et statistiques
+
+
+
+---
+
+9 Gestion des comptes utilisateurs
+
+Fonctionnalites :
+
+Creation et gestion des comptes utilisateurs internes (administrateurs, techniciens, receptionnistes)
+
+Gestion des roles et permissions (acces limite par fonctionnalite)
+
+Historique des actions des utilisateurs (logs)
+
+
+Roles associes :
+
+Administrateur : Gestion complete des utilisateurs et des permissions
+
+
+
+---
+
+10 Front-Office 
+
+Fonctionnalites :
+
+Creation et gestion du compte client
+
+Suivi en temps reel de l’etat des reparations
+
+Consultation de l’historique des reparations et des appareils confies
+
+Consultation des factures et paiements en ligne
+
+Roles associes :
+
+Client : Utilisateur principal du front-Office, acces a ses donnees personnelles et interactions avec l’atelier
+
+
+
+---
+
+11 Gestion des garanties
+
+Fonctionnalites :
+
+Suivi des garanties sur les pieces remplacees
+
+Gestion des reclamations et retours en cas de probleme
+
+
+Roles associes :
+
+Administrateur : Gestion globale des garanties
+
+Receptionniste : Suivi des reclamations des clients
+
+Client : Consultation des garanties associees a ses reparations
