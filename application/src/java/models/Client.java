@@ -24,6 +24,7 @@ public class Client{
 		this.addresse = addresse;
 	}
 
+	
 	public String getId_client() {
 		return this.id_client;
 	}
@@ -167,6 +168,50 @@ public class Client{
 			if (statement != null) try { statement.close(); } catch (SQLException e) {}
 		}
 	}
+
+	public static List<Client> getAllFilterByDate(Connection connection, String date) throws Exception {
+		List<Client> liste = new ArrayList<Client>();
+		PreparedStatement statement = null;
+		ResultSet resultSet = null;
+		
+		try {
+			String query;
+			if (date == null) {
+				query = "SELECT DISTINCT c.* " +  // Changed to select all client fields
+						"FROM retour r " +
+						"JOIN appareil a ON r.id_appareil = a.id_appareil " +
+						"JOIN client c ON a.id_client = c.id_client";
+				statement = connection.prepareStatement(query);
+			} else {
+				query = "SELECT DISTINCT c.* " +  // Changed to select all client fields
+						"FROM retour r " +
+						"JOIN appareil a ON r.id_appareil = a.id_appareil " +
+						"JOIN client c ON a.id_client = c.id_client " +
+						"WHERE r.date_retour = ?";
+				statement = connection.prepareStatement(query);
+				statement.setDate(1, java.sql.Date.valueOf(date));
+			}
+			
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				Client client = new Client();
+				client.setId_client(resultSet.getString("id_client"));
+				client.setEmail(resultSet.getString("email"));
+				client.setNom(resultSet.getString("nom"));
+				client.setTelephone(resultSet.getInt("telephone"));
+				client.setAddresse(resultSet.getString("addresse"));
+				liste.add(client);
+			}
+			return liste;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
+			if (statement != null) try { statement.close(); } catch (SQLException e) {}
+		}
+	}
+
 	public static Client getById(String id,Connection connection) throws Exception {
 		Client instance = null;
 		PreparedStatement statement = null;

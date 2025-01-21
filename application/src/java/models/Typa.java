@@ -9,14 +9,14 @@ import java.util.List;
 
 public class Typa {
     private String id_typa;
-    private String libelle;
+    private String nom;
 
     public Typa() {
     }
 
     public Typa(String id_typa, String libelle) {
         this.id_typa = id_typa;
-        this.libelle = libelle;
+        this.nom = libelle;
     }
 
     public String getId_typa() {
@@ -27,12 +27,12 @@ public class Typa {
         this.id_typa = id_typa;
     }
 
-    public String getLibelle() {
-        return libelle;
+    public String getNom() {
+        return nom;
     }
 
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
+    public void setNom(String libelle) {
+        this.nom = libelle;
     }
 
     // Méthode d'insertion
@@ -40,9 +40,9 @@ public class Typa {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            String query = "INSERT INTO typa (libelle) VALUES (?) RETURNING id_typa";
+            String query = "INSERT INTO typa (nom) VALUES (?) RETURNING id_typa";
             statement = connection.prepareStatement(query);
-            statement.setString(1, getLibelle());
+            statement.setString(1, getNom());
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 this.id_typa = resultSet.getString("id_typa");
@@ -62,9 +62,9 @@ public class Typa {
     public void update(Connection connection) throws Exception {
         PreparedStatement statement = null;
         try {
-            String query = "UPDATE typa SET libelle = ? WHERE id_typa = ?";
+            String query = "UPDATE typa SET nom = ? WHERE id_typa = ?";
             statement = connection.prepareStatement(query);
-            statement.setString(1, getLibelle());
+            statement.setString(1, getNom());
             statement.setString(2, getId_typa());
             statement.executeUpdate();
             System.out.println("Données Typa mises à jour avec succès");
@@ -105,7 +105,7 @@ public class Typa {
             while (resultSet.next()) {
                 Typa typa = new Typa();
                 typa.setId_typa(resultSet.getString("id_typa"));
-                typa.setLibelle(resultSet.getString("libelle"));
+                typa.setNom(resultSet.getString("nom"));
                 liste.add(typa);
             }
             return liste;
@@ -133,7 +133,7 @@ public class Typa {
             if (resultSet.next()) {
                 typa = new Typa();
                 typa.setId_typa(resultSet.getString("id_typa"));
-                typa.setLibelle(resultSet.getString("libelle"));
+                typa.setNom(resultSet.getString("nom"));
             }
             return typa;
         } catch (SQLException e) {

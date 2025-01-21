@@ -65,6 +65,11 @@
                 </a>
                 <ul id="client-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                     <li>
+                        <a href="TraitementClientServlet?action=client_retour">
+                            <i class="bi bi-circle"></i><span>retour client</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="TraitementClientServlet">
                             <i class="bi bi-circle"></i><span>Clients</span>
                         </a>
@@ -122,17 +127,31 @@
                         </a>
                     </li>
                     <li>
-                        <a href="TraitementAppareil_employeServlet?action=form">
-                            <i class="bi bi-circle"></i><span>Attribution appareil</span>
-                        </a>
-                    </li>
-                    <li>
                         <a href="TraitementReparationServlet?action=form">
                             <i class="bi bi-circle"></i><span>Ajout</span>
                         </a>
                     </li>
                 </ul>
             </li>
+
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#appareil_piece-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Attribution pieces</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="appareil_piece-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="TraitementReparation_reelServlet">
+                            <i class="bi bi-circle"></i><span>Liste</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TraitementReparation_reelServlet?action=form">
+                            <i class="bi bi-circle"></i><span>Attribution</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#piece-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-menu-button-wide"></i><span>Piece Detache</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -155,6 +174,7 @@
                     </li>
                 </ul>
             </li>
+
             <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#typa-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-menu-button-wide"></i><span>Typa</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -171,7 +191,43 @@
                         </a>
                     </li>
                 </ul>
-            </li>            
+            </li>     
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#retour-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Retour</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="retour-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="TraitementRetourServlet">
+                            <i class="bi bi-circle"></i><span>retours</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TraitementRetourServlet?action=form">
+                            <i class="bi bi-circle"></i><span>Ajout</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>  
+            
+            <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#recommandation-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Recommandation</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="recommandation-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="TraitementRecommandationServlet">
+                            <i class="bi bi-circle"></i><span>Recommandations</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TraitementRecommandationServlet?action=form">
+                            <i class="bi bi-circle"></i><span>Ajout</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>  
 
         </ul>
 

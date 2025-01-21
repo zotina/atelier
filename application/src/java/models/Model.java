@@ -19,7 +19,9 @@ public class Model{
 		this.libelle = libelle;
 		this.marque = marque;
 	}
-
+	public String getModelMarque(){
+		return libelle + " " + marque.getNom();
+	}
 	public String getId_model() {
 		return this.id_model;
 	}

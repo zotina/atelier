@@ -13,21 +13,28 @@ public class Piece{
 	String reference;
 	String description;
 	Categorie categorie ;
+	Typa typa ;
 	Marque marque ;
 
 	public Piece(){
 	}
 
-	public Piece(String id_piece, String numero_serie, double prix_unitaire, String reference, String description, Categorie categorie, Marque marque) {
+	public Piece(String id_piece, String numero_serie, double prix_unitaire, String reference, String description, Categorie categorie, Typa typa, Marque marque) {
 		this.id_piece = id_piece;
 		this.numero_serie = numero_serie;
 		this.prix_unitaire = prix_unitaire;
 		this.reference = reference;
 		this.description = description;
 		this.categorie = categorie;
+		this.typa = typa;
 		this.marque = marque;
 	}
 
+	public String getLibelle(){
+		return this.categorie.getNom() + " " + 
+		this.marque.getNom() + " " +
+		this.typa.getNom();
+	}
 	public String getId_piece() {
 		return this.id_piece;
 	}
@@ -50,6 +57,10 @@ public class Piece{
 
 	public Categorie getCategorie() {
 		return this.categorie;
+	}
+
+	public Typa getTypa() {
+		return this.typa;
 	}
 
 	public Marque getMarque() {
@@ -80,6 +91,10 @@ public class Piece{
 		this.categorie = categorie;
 	}
 
+	public void setTypa(Typa typa) {
+		this.typa = typa;
+	}
+
 	public void setMarque(Marque marque) {
 		this.marque = marque;
 	}
@@ -88,14 +103,15 @@ public class Piece{
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
-            String query = "INSERT INTO piece (numero_serie,prix_unitaire,reference,description,id_categorie,id_marque) VALUES (?,?,?,?,?,?) RETURNING id_piece";
+            String query = "INSERT INTO piece (numero_serie,prix_unitaire,reference,description,id_categorie,id_typa,id_marque) VALUES (?,?,?,?,?,?,?) RETURNING id_piece";
             statement = connection.prepareStatement(query);
             statement.setString(1, getNumero_serie());
             statement.setDouble(2, getPrix_unitaire());
             statement.setString(3, getReference());
             statement.setString(4, getDescription());
             statement.setString(5, this.categorie.getId_categorie());
-            statement.setString(6, this.marque.getId_marque());
+            statement.setString(6, this.typa.getId_typa());
+            statement.setString(7, this.marque.getId_marque());
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 this.id_piece = resultSet.getString("id_piece");
@@ -111,7 +127,6 @@ public class Piece{
                 if (statement != null) {
                     statement.close();
                 }
-                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -121,16 +136,17 @@ public class Piece{
 	public void update(Connection connection) throws Exception {
         PreparedStatement statement = null;
         try {
-            String query = "UPDATE piece SET numero_serie = ?, prix_unitaire = ?, reference = ?, description = ?, id_categorie = ?, id_marque = ? WHERE id_piece = ?";
+            String query = "UPDATE piece SET numero_serie = ?, prix_unitaire = ?, reference = ?, description = ?, id_categorie = ?, id_typa = ?, id_marque = ? WHERE id_piece = ?";
             statement = connection.prepareStatement(query);
             statement.setString(1, getNumero_serie());
             statement.setDouble(2, getPrix_unitaire());
             statement.setString(3, getReference());
             statement.setString(4, getDescription());
             statement.setString(5, this.categorie.getId_categorie());
-            statement.setString(6, this.marque.getId_marque());
-            statement.setString(7, getId_piece());
-            statement.executeUpdate();	
+            statement.setString(6, this.typa.getId_typa());
+            statement.setString(7, this.marque.getId_marque());
+            statement.setString(8, getId_piece());
+            statement.executeUpdate();
             System.out.println("Données Piece mises à jour avec succès");
         } catch (Exception e) {
             throw new Exception(e.getMessage());
@@ -139,7 +155,6 @@ public class Piece{
                 if (statement != null) {
                     statement.close();
                 }
-                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -161,7 +176,6 @@ public class Piece{
                 if (statement != null) {
                     statement.close();
                 }
-                
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -185,6 +199,8 @@ public class Piece{
 				instance.setDescription(resultSet.getString("description"));
 				Categorie categorie = Categorie.getById(resultSet.getString("id_categorie"),connection);
 				instance.setCategorie(categorie);
+				Typa typa = Typa.getById(resultSet.getString("id_typa"),connection);
+				instance.setTypa(typa);
 				Marque marque = Marque.getById(resultSet.getString("id_marque"),connection);
 				instance.setMarque(marque);
 				liste.add(instance);
@@ -216,6 +232,8 @@ public class Piece{
 				instance.setDescription(resultSet.getString("description"));
 				Categorie categorie = Categorie.getById(resultSet.getString("id_categorie"),connection);
 				instance.setCategorie(categorie);
+				Typa typa = Typa.getById(resultSet.getString("id_typa"),connection);
+				instance.setTypa(typa);
 				Marque marque = Marque.getById(resultSet.getString("id_marque"),connection);
 				instance.setMarque(marque);
 			}

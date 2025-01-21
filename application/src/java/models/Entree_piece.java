@@ -19,13 +19,13 @@ public class Entree_piece{
 	public Entree_piece(){
 	}
 
-	public Entree_piece(String id_entree_piece, Date date_entree, int quantite, double prix_unitaire, Fornisseur fornisseur, Piece piece) {
-		this.id_entree_piece = id_entree_piece;
-		this.date_entree = date_entree;
-		this.quantite = quantite;
-		this.prix_unitaire = prix_unitaire;
-		this.fornisseur = fornisseur;
-		this.piece = piece;
+	public Entree_piece(String id_entree_piece, String date_entree, int quantite, double prix_unitaire, Fornisseur fornisseur, Piece piece) {
+		this.setId_entree_piece(id_entree_piece);
+		this.setDate_entree(date_entree);
+		this.setQuantite(quantite);
+		this.setPrix_unitaire(prix_unitaire);
+		this.setFornisseur(fornisseur);
+		this.setPiece(piece);
 	}
 
 	public String getId_entree_piece() {
@@ -56,8 +56,8 @@ public class Entree_piece{
 		this.id_entree_piece = newId_entree_piece;
 	}
 
-	public void setDate_entree(Date newDate_entree) {
-		this.date_entree = newDate_entree;
+	public void setDate_entree(String newDate_entree) {
+		this.date_entree = Date.valueOf(newDate_entree);
 	}
 
 	public void setQuantite(int newQuantite) {
@@ -166,7 +166,7 @@ public class Entree_piece{
 			while (resultSet.next()) {
 				Entree_piece instance = new Entree_piece();
 				instance.setId_entree_piece(resultSet.getString("id_entree_piece"));
-				instance.setDate_entree(resultSet.getDate("date_entree"));
+				instance.setDate_entree(resultSet.getString("date_entree"));
 				instance.setQuantite(resultSet.getInt("quantite"));
 				instance.setPrix_unitaire(resultSet.getDouble("prix_unitaire"));
 				Fornisseur fornisseur = Fornisseur.getById(resultSet.getString("id_fornisseur"),connection);
@@ -196,7 +196,7 @@ public class Entree_piece{
 			if (resultSet.next()) {
 				instance = new Entree_piece();
 				instance.setId_entree_piece(resultSet.getString("id_entree_piece"));
-				instance.setDate_entree(resultSet.getDate("date_entree"));
+				instance.setDate_entree(resultSet.getString("date_entree"));
 				instance.setQuantite(resultSet.getInt("quantite"));
 				instance.setPrix_unitaire(resultSet.getDouble("prix_unitaire"));
 				Fornisseur fornisseur = Fornisseur.getById(resultSet.getString("id_fornisseur"),connection);

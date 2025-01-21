@@ -48,17 +48,23 @@ CREATE TABLE etat_reparation(
    PRIMARY KEY(id_etat)
 );
 
+CREATE TABLE typa(
+   id_typa VARCHAR(50) ,
+   nom VARCHAR(50) ,
+   PRIMARY KEY(id_typa)
+);
+
 CREATE TABLE appareil(
    id_appareil VARCHAR(50) ,
    numero_serie TEXT NOT NULL,
    est_repare BOOLEAN NOT NULL,
    desc_probleme TEXT NOT NULL,
    date_deposition TIMESTAMP NOT NULL,
-   date_recuperation TIMESTAMP,
-   estRecuperer BOOLEAN NOT NULL,
+   id_typa VARCHAR(50)  NOT NULL,
    id_client VARCHAR(255)  NOT NULL,
    id_model VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_appareil),
+   FOREIGN KEY(id_typa) REFERENCES typa(id_typa),
    FOREIGN KEY(id_client) REFERENCES client(id_client),
    FOREIGN KEY(id_model) REFERENCES model(id_model)
 );
@@ -71,7 +77,6 @@ CREATE TABLE employe(
    salaire_personnalise VARCHAR(255) ,
    date_embauche DATE NOT NULL,
    addresse VARCHAR(255) ,
-   disponible BOOLEAN,
    id_role VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_employe),
    FOREIGN KEY(id_role) REFERENCES role(id_role)
@@ -84,9 +89,11 @@ CREATE TABLE piece(
    reference TEXT NOT NULL,
    description VARCHAR(255) ,
    id_categorie VARCHAR(50)  NOT NULL,
+   id_typa VARCHAR(50)  NOT NULL,
    id_marque VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_piece),
    FOREIGN KEY(id_categorie) REFERENCES categorie(id_categorie),
+   FOREIGN KEY(id_typa) REFERENCES typa(id_typa),
    FOREIGN KEY(id_marque) REFERENCES marque(id_marque)
 );
 
@@ -95,11 +102,45 @@ CREATE TABLE entree_piece(
    date_entree DATE NOT NULL,
    quantite INTEGER NOT NULL,
    prix_unitaire NUMERIC(15,2)   NOT NULL,
-   id_fornisseur VARCHAR(50)  NOT NULL,
    id_piece VARCHAR(50)  NOT NULL,
+   id_fornisseur VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_entree_piece),
-   FOREIGN KEY(id_fornisseur) REFERENCES fornisseur(id_fornisseur),
+   FOREIGN KEY(id_piece) REFERENCES piece(id_piece),
+   FOREIGN KEY(id_fornisseur) REFERENCES fornisseur(id_fornisseur)
+);
+
+CREATE TABLE retour(
+   id_retour VARCHAR(50) ,
+   prix_total_main_doeuvre NUMERIC(15,2)  ,
+   prix_total_piece NUMERIC(15,2)  ,
+   date_retour DATE,
+   id_appareil VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id_retour),
+   UNIQUE(id_appareil),
+   FOREIGN KEY(id_appareil) REFERENCES appareil(id_appareil)
+);
+
+CREATE TABLE recommandation(
+   id_recommandation VARCHAR(50) ,
+   date_recommandation DATE,
+   id_piece VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id_recommandation),
+   UNIQUE(id_piece),
    FOREIGN KEY(id_piece) REFERENCES piece(id_piece)
+);
+
+CREATE TABLE reparation(
+   id_reparation VARCHAR(50) ,
+   diagnostic BOOLEAN,
+   date_debut TIMESTAMP NOT NULL,
+   prix NUMERIC(15,2)  ,
+   id_etat VARCHAR(50)  NOT NULL,
+   id_appareil VARCHAR(50)  NOT NULL,
+   id_categorie VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id_reparation),
+   FOREIGN KEY(id_etat) REFERENCES etat_reparation(id_etat),
+   FOREIGN KEY(id_appareil) REFERENCES appareil(id_appareil),
+   FOREIGN KEY(id_categorie) REFERENCES categorie(id_categorie)
 );
 
 CREATE TABLE facture_client(
@@ -109,32 +150,19 @@ CREATE TABLE facture_client(
    prix_supplementaire NUMERIC(15,2)  ,
    prix_total_employe NUMERIC(15,2)  ,
    date_facturation TIMESTAMP NOT NULL,
-   id_appareil VARCHAR(50)  NOT NULL,
+   id_retour VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_facture_client),
-   UNIQUE(id_appareil),
-   FOREIGN KEY(id_appareil) REFERENCES appareil(id_appareil)
-);
-
-CREATE TABLE histo_salaire(
-   id_histo_salaire SERIAL,
-   ancien_salaire NUMERIC(15,2)  ,
-   nouveau_salaire NUMERIC(15,2)  ,
-   date_changement DATE,
-   raison TEXT,
-   id_employe VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_histo_salaire),
-   FOREIGN KEY(id_employe) REFERENCES employe(id_employe)
+   FOREIGN KEY(id_retour) REFERENCES retour(id_retour)
 );
 
 CREATE TABLE ligne_facture_client(
    id_ligne_facture_client VARCHAR(50) ,
    quantite INTEGER,
-   prix_unitaire VARCHAR(50) ,
-   id_piece VARCHAR(50)  NOT NULL,
    id_facture_client VARCHAR(50)  NOT NULL,
+   id_piece VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_ligne_facture_client),
-   FOREIGN KEY(id_piece) REFERENCES piece(id_piece),
-   FOREIGN KEY(id_facture_client) REFERENCES facture_client(id_facture_client)
+   FOREIGN KEY(id_facture_client) REFERENCES facture_client(id_facture_client),
+   FOREIGN KEY(id_piece) REFERENCES piece(id_piece)
 );
 
 CREATE TABLE paiement_facture_client(
@@ -146,32 +174,19 @@ CREATE TABLE paiement_facture_client(
    FOREIGN KEY(id_facture_client) REFERENCES facture_client(id_facture_client)
 );
 
-CREATE TABLE appareil_employe(
-   id_appareil_employe VARCHAR(50) ,
-   id_appareil VARCHAR(50)  NOT NULL,
-   id_employe VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_appareil_employe),
-   FOREIGN KEY(id_appareil) REFERENCES appareil(id_appareil),
-   FOREIGN KEY(id_employe) REFERENCES employe(id_employe)
-);
-
-CREATE TABLE reparation(
+CREATE TABLE reparation_employe(
    id_reparation VARCHAR(50) ,
-   diagnostic BOOLEAN,
-   date_debut TIMESTAMP NOT NULL,
-   prix NUMERIC(15,2)  ,
-   garentie BIGINT,
-   id_appareil_employe VARCHAR(50)  NOT NULL,
-   id_etat VARCHAR(50)  NOT NULL,
-   PRIMARY KEY(id_reparation),
-   FOREIGN KEY(id_appareil_employe) REFERENCES appareil_employe(id_appareil_employe),
-   FOREIGN KEY(id_etat) REFERENCES etat_reparation(id_etat)
+   id_employe VARCHAR(50) ,
+   PRIMARY KEY(id_reparation, id_employe),
+   FOREIGN KEY(id_reparation) REFERENCES reparation(id_reparation),
+   FOREIGN KEY(id_employe) REFERENCES employe(id_employe)
 );
 
 CREATE TABLE reparation_reel(
    id_reparation VARCHAR(50) ,
    id_piece VARCHAR(50) ,
    quantite INTEGER NOT NULL,
+   date_sortie DATE NOT NULL,
    PRIMARY KEY(id_reparation, id_piece),
    FOREIGN KEY(id_reparation) REFERENCES reparation(id_reparation),
    FOREIGN KEY(id_piece) REFERENCES piece(id_piece)
