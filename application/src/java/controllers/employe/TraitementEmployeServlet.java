@@ -10,6 +10,7 @@ import jakarta.servlet.http.*;
 import java.sql.Connection;
 import java.sql.Date;
 
+import models.Commission;
 import models.Employe;
 import models.Role;
 import jakarta.servlet.annotation.WebServlet;
@@ -34,6 +35,13 @@ public class TraitementEmployeServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 						break;
+					case "commission":
+					try {
+						getCommission(request, response, connection);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					break;
 					case "form":
 						try {
 							loadformulaire(request, response, connection);
@@ -139,6 +147,14 @@ public class TraitementEmployeServlet extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	private void getCommission(HttpServletRequest request, HttpServletResponse response, Connection connection)
+			throws Exception {
+		String dateMin = request.getParameter("dateMin");
+		String dateMax = request.getParameter("dateMax");
+		List<Commission> commissions = Commission.getCommissionFilterByPeriode(connection, dateMin, dateMax);
+		request.setAttribute("commissions", commissions);
+		forwardRequest(request, response, "pages/employe/commissionEmploye.jsp");
 	}
 
 }

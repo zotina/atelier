@@ -58,3 +58,18 @@ LEFT JOIN
 
 
 
+-- commission 
+CREATE OR REPLACE VIEW vue_commission_employe AS
+SELECT 
+    e.id_employe,
+    e.nom as nom_employe,
+    r.id_reparation,
+    CAST(r.date_debut AS DATE) as date_reparation,
+    r.prix as prix_reparation,
+    r.id_appareil,
+    ROUND(r.prix * 0.05, 2) as commission
+FROM employe e
+JOIN reparation_employe re ON e.id_employe = re.id_employe
+JOIN reparation r ON re.id_reparation = r.id_reparation
+WHERE r.prix IS NOT NULL
+ORDER BY e.id_employe, r.date_debut;

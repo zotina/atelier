@@ -94,7 +94,7 @@ public class Reparation{
 
 	public Reparation(){
 	}
-
+	
 	public Reparation(String id_reparation, String date_debut, double prix, Etat_reparation etat_reparation,Categorie categorie,Appareil appareil) {
 		this.setId_reparation(id_reparation);
 		this.setDate_debut(date_debut);
@@ -348,6 +348,11 @@ public class Reparation{
 			if (resultSet != null) try { resultSet.close(); } catch (SQLException e) {}
 			if (statement != null) try { statement.close(); } catch (SQLException e) {}
 		}
+	}
+
+
+	public void setDate_debut(LocalDateTime date_debut) {
+		this.date_debut = date_debut;
 	}
 
 }
