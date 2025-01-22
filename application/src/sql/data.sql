@@ -150,3 +150,8 @@ VALUES
 INSERT INTO paiement_facture_client (date_paiment, montant_payer, id_facture_client)
 VALUES 
 ('2025-01-04 10:30:00', 240.00, 'FAC-000001');
+
+INSERT INTO commission (valeur)
+VALUES 
+(0.05);
+

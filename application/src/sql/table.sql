@@ -193,3 +193,8 @@ CREATE TABLE reparation_reel(
    FOREIGN KEY(id_reparation) REFERENCES reparation(id_reparation),
    FOREIGN KEY(id_piece) REFERENCES piece(id_piece)
 );
+
+CREATE TABLE commission(
+   id_commission SERIAL,
+   valeur NUMERIC(15,2) NOT NULL
+);

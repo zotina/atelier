@@ -53,8 +53,7 @@
                                     totalCommission += commission.getCommission();
                                 %>
                                     <tr>
-                                        <td><a href="FormActionEmployeServlet?action=detailsEmployer&id=<%= commission.getEmploye().getId_employe() %>"></a> 
-                                            <%= commission.getEmploye().getId_employe() %></td>
+                                        <td><a href="FormActionEmployeServlet?action=detailsEmployer&id=<%= commission.getEmploye().getId_employe() %>"><%= commission.getEmploye().getId_employe() %></a> </td>
                                         <td><%= commission.getReparation().getId_reparation() %></td>
                                         <td><%= commission.getReparation().getAppareil().getLibelle() %></td>
                                         <td><%= commission.getReparation().getDate_debut() %></td>

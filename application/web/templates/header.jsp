@@ -153,6 +153,24 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link collapsed" data-bs-target="#attribution_employe-nav" data-bs-toggle="collapse" href="#">
+                    <i class="bi bi-menu-button-wide"></i><span>Attribution employe</span><i class="bi bi-chevron-down ms-auto"></i>
+                </a>
+                <ul id="attribution_employe-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                    <li>
+                        <a href="TraitementReparation_employeServlet">
+                            <i class="bi bi-circle"></i><span>Liste</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="TraitementReparation_employeServlet?action=form">
+                            <i class="bi bi-circle"></i><span>Attribution</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item">
                 <a class="nav-link collapsed" data-bs-target="#piece-nav" data-bs-toggle="collapse" href="#">
                     <i class="bi bi-menu-button-wide"></i><span>Piece Detache</span><i class="bi bi-chevron-down ms-auto"></i>
                 </a>
