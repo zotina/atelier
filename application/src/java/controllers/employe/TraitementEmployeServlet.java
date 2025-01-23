@@ -12,6 +12,7 @@ import java.sql.Date;
 
 import models.Commission;
 import models.Employe;
+import models.Genre;
 import models.Role;
 import jakarta.servlet.annotation.WebServlet;
 
@@ -106,10 +107,11 @@ public class TraitementEmployeServlet extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
-	private void loadformulaire(HttpServletRequest request, HttpServletResponse response, Connection connection)
-			throws Exception {
+	private void loadformulaire(HttpServletRequest request, HttpServletResponse response,Connection connection) throws Exception {
 		List<Role> roleList = Role.getAll(connection);
 		request.setAttribute("roleList", roleList);
+		List<Genre> genreList = Genre.getAll(connection);
+		request.setAttribute("genreList", genreList);
 		forwardRequest(request, response, "pages/employe/formulaireEmploye.jsp");
 	}
 
@@ -150,10 +152,13 @@ public class TraitementEmployeServlet extends HttpServlet {
 	}
 	private void getCommission(HttpServletRequest request, HttpServletResponse response, Connection connection)
 			throws Exception {
+		List<Genre> genres = Genre.getAll(connection); 
 		String dateMin = request.getParameter("dateMin");
 		String dateMax = request.getParameter("dateMax");
-		List<Commission> commissions = Commission.getCommissionFilterByPeriode(connection, dateMin, dateMax);
+		String genre = request.getParameter("genre");
+		List<Commission> commissions = Commission.getCommissionFilterByPeriode(connection, dateMin, dateMax,genre);
 		request.setAttribute("commissions", commissions);
+		request.setAttribute("genres", genres);
 		forwardRequest(request, response, "pages/employe/commissionEmploye.jsp");
 	}
 

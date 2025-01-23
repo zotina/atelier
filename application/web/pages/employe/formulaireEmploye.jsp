@@ -5,11 +5,13 @@
 <%
 	List<Employe> employeList = null;
 	List<Role> roleList = null;
+	List<Genre> genreList = null;
 	Employe employe = null;
 	
 	try {
 		employeList = (List<Employe>) request.getAttribute("employeList");
 		roleList = (List<Role>) request.getAttribute("roleList");
+		genreList = (List<Genre>) request.getAttribute("genreList");
 		employe = (Employe) request.getAttribute("employe");
 	} catch (Exception e) {
 		// Log the error or handle it appropriately
@@ -53,6 +55,15 @@
 							<% for (Role role : roleList) { %>
 							<% boolean isSelected = (role.getId_role() == (employe != null ? employe.getRole().getId_role() : 0)); %>
 							<option value="<%= role.getId_role() %>" <%= isSelected ? "selected" : "" %>><%= role.getLibelle() %></option>
+							<% } %>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="id_genre">Genre</label>
+						<select class="form-control" id="id_genre" name="id_genre">
+							<% for (Genre genre : genreList) { %>
+							<% boolean isSelected = (genre.getId_genre() == (employe != null ? employe.getGenre().getId_genre() : 0)); %>
+							<option value="<%= genre.getId_genre() %>" <%= isSelected ? "selected" : "" %>><%= genre.getLibelle() %></option>
 							<% } %>
 						</select>
 					</div>

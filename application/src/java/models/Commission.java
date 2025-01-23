@@ -13,62 +13,65 @@ public class Commission {
     private double commission;
     private Appareil appareil;
     
-    
-    public static List<Commission> getCommissionFilterByPeriode(Connection connection, 
-            String dateDebutMin, String dateDebutMax) throws Exception {
+    public static List<Commission> getCommissionFilterByPeriode(Connection connection,
+        String dateDebutMin, String dateDebutMax, String genre) throws Exception {
         List<Commission> liste = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        
+
         try {
             StringBuilder query = new StringBuilder(
                 "SELECT * FROM vue_commission_employe WHERE 1=1"
             );
+
+            // Add conditions based on parameters
+            if (genre != null && !genre.isEmpty()) {
+                query.append(" AND id_genre = ?");
+            }
             if (dateDebutMin != null && !dateDebutMin.isEmpty()) {
                 query.append(" AND date_reparation >= ?");
             }
             if (dateDebutMax != null && !dateDebutMax.isEmpty()) {
                 query.append(" AND date_reparation <= ?");
             }
-            
+
             statement = connection.prepareStatement(query.toString());
-            
+
             int index = 1;
+            if (genre != null && !genre.isEmpty()) {
+                statement.setString(index++, genre);
+            }
             if (dateDebutMin != null && !dateDebutMin.isEmpty()) {
                 statement.setDate(index++, Date.valueOf(dateDebutMin));
             }
             if (dateDebutMax != null && !dateDebutMax.isEmpty()) {
                 statement.setDate(index++, Date.valueOf(dateDebutMax));
             }
-            
+
             resultSet = statement.executeQuery();
-            
+
             while (resultSet.next()) {
                 Commission instance = new Commission();
-                
-                // Créer l'objet Employe
+
                 Employe employe = new Employe();
                 employe.setId_employe(resultSet.getString("id_employe"));
                 employe.setNom(resultSet.getString("nom_employe"));
                 instance.setEmploye(employe);
-                
-                // Créer l'objet Reparation
+
                 Reparation reparation = new Reparation();
                 reparation.setId_reparation(resultSet.getString("id_reparation"));
                 reparation.setDate_debut(resultSet.getTimestamp("date_reparation").toLocalDateTime());
                 reparation.setPrix(resultSet.getDouble("prix_reparation"));
-                Appareil appareil = Appareil.getById(resultSet.getString("id_appareil"), connection);
-				reparation.setAppareil(appareil);
-                instance.setReparation(reparation);
-
-                // Créer l'objet Appareil
-
-                // Définir la commission
-                instance.setCommission(resultSet.getDouble("commission"));
                 
+                Appareil appareil = Appareil.getById(resultSet.getString("id_appareil"), connection);
+                reparation.setAppareil(appareil);
+                
+                instance.setReparation(reparation);
+                instance.setCommission(resultSet.getDouble("commission"));
+
                 liste.add(instance);
             }
-            
+
             return liste;
         } finally {
             if (resultSet != null) resultSet.close();

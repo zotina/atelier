@@ -198,3 +198,23 @@ CREATE TABLE commission(
    id_commission SERIAL,
    valeur NUMERIC(15,2) NOT NULL
 );
+
+
+CREATE TABLE genre(
+   id_genre VARCHAR(50) ,
+   libelle VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id_genre)
+);
+
+ALTER TABLE employe 
+ADD COLUMN id_genre VARCHAR(50),
+ADD CONSTRAINT fk_genre FOREIGN KEY (id_genre) REFERENCES genre(id_genre);
+
+
+-- commission 
+-- Create condition_commission table
+CREATE TABLE condition_commission (
+    min_prix NUMERIC(15,2)
+);
+
+

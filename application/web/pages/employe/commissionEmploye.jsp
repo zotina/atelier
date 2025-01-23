@@ -5,9 +5,11 @@
 <%
     List<Commission> commissionList = null;
     List<Employe> employeList = null;
+    List<Genre> genreList = null;
 
     try {
         commissionList = (List<Commission>) request.getAttribute("commissions");
+        genreList = (List<Genre>) request.getAttribute("genres");
     } catch (Exception e) {
         e.printStackTrace();
     }
@@ -28,6 +30,15 @@
                 <label for="dateDebutMax">Date fin :</label>
                 <input type="date" id="dateMax" name="dateMax">
                 
+                <label for="genre">Genre :</label>
+                <select id="genre" name="genre">
+                    <option value="">Tous les genres</option>
+                    <% if (genreList != null) { 
+                        for (Genre genre : genreList) { %>
+                            <option value="<%= genre.getId_genre() %>"><%= genre.getLibelle() %></option>
+                    <% } 
+                    } %>
+                </select>
                 <button type="submit">Rechercher</button>
             </form>
 

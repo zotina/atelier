@@ -18,7 +18,17 @@ CREATE SEQUENCE IF NOT EXISTS seq_typa START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_reparation_reel START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_retour START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_recommandation START 1;
+CREATE SEQUENCE IF NOT EXISTS seq_genre START 1;
 
+
+CREATE OR REPLACE FUNCTION generate_id_seq_genre()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.id_genre := 'GEN-' || LPAD(NEXTVAL('seq_genre')::TEXT, 6, '0'); 
+   RETURN NEW;
+END;
+$$
+ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION generate_id_seq_recommandation()
 RETURNS TRIGGER AS $$
@@ -190,6 +200,12 @@ BEGIN
 END;  
 $$
  LANGUAGE plpgsql;  
+
+
+CREATE TRIGGER trig_genre_id
+BEFORE INSERT ON genre  
+FOR EACH ROW  
+EXECUTE FUNCTION generate_id_seq_genre();  
 
 
 CREATE TRIGGER trig_recommandation_id

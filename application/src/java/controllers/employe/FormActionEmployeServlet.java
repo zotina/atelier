@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.Date;
 
 import models.Employe;
+import models.Genre;
 import models.Role;
 import jakarta.servlet.annotation.WebServlet;
 
@@ -96,8 +97,7 @@ public class FormActionEmployeServlet extends HttpServlet {
 		processRequest(request, response);
 	}
 
-	private void insert(HttpServletRequest request, HttpServletResponse response, Connection connection)
-			throws Exception {
+private void insert(HttpServletRequest request, HttpServletResponse response,Connection connection) throws Exception {
 		try {
 			String id_employe = request.getParameter("id_employe");
 			String nom = request.getParameter("nom");
@@ -107,16 +107,17 @@ public class FormActionEmployeServlet extends HttpServlet {
 			Date date_embauche = Date.valueOf(request.getParameter("date_embauche"));
 			String addresse = request.getParameter("addresse");
 			String id_role = request.getParameter("id_role");
-			Role id_roleObj = Role.getById(id_role, connection);
-			Employe employe = new Employe(id_employe, nom, telephone, email, salaire_personnalise, date_embauche,
-					addresse, id_roleObj);
+			Role id_roleObj = Role.getById(id_role,connection);
+			String id_genre = request.getParameter("id_genre");
+			Genre id_genreObj = Genre.getById(id_genre,connection);
+			Employe employe = new Employe(id_employe, nom, telephone, email, salaire_personnalise, date_embauche, addresse, id_roleObj, id_genreObj);
 			employe.insert(connection);
 			forwardRequest(request, response, "TraitementEmployeServlet");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
 	private void detailsEmployer(HttpServletRequest request, HttpServletResponse response, Connection connection)
 			throws Exception {
 		try {

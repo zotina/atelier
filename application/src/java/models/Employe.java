@@ -18,7 +18,8 @@ public class Employe {
 	String addresse;
 	boolean disponible;
 	Role role;
-
+	Genre genre ;
+	
 	public static List<Employe> search(Connection connection, String nom, String email, String telephone,
 			String salaireMin, String salaireMax, String dateDebut, String dateFin, String roleId) throws Exception {
 		List<Employe> liste = new ArrayList<>();
@@ -139,6 +140,18 @@ public class Employe {
 		this.role = role;
 	}
 
+	public Employe(String id_employe, String nom, String telephone, String email, String salaire_personnalise, Date date_embauche, String addresse, Role role, Genre genre) {
+		this.id_employe = id_employe;
+		this.nom = nom;
+		this.telephone = telephone;
+		this.email = email;
+		this.salaire_personnalise = salaire_personnalise;
+		this.date_embauche = date_embauche;
+		this.addresse = addresse;
+		this.role = role;
+		this.genre = genre;
+	}
+
 	public String getId_employe() {
 		return this.id_employe;
 	}
@@ -212,37 +225,41 @@ public class Employe {
 	}
 
 	public void insert(Connection connection) throws Exception {
-		PreparedStatement statement = null;
-		ResultSet resultSet = null;
-		try {
-			String query = "INSERT INTO employe (nom,telephone,email,salaire_personnalise,date_embauche,addresse,id_role) VALUES (?,?,?,?,?,?,?) RETURNING id_employe";
-			statement = connection.prepareStatement(query);
-			statement.setString(1, getNom());
-			statement.setString(2, getTelephone());
-			statement.setString(3, getEmail());
-			statement.setString(4, getSalaire_personnalise());
-			statement.setDate(5, getDate_embauche());
-			statement.setString(6, getAddresse());
-			statement.setString(7, this.role.getId_role());
-			resultSet = statement.executeQuery();
-			if (resultSet.next()) {
-				this.id_employe = resultSet.getString("id_employe");
-			}
-			System.out.println("Données Employe insérées avec succès");
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		} finally {
-			try {
-				if (resultSet != null) {
-					resultSet.close();
-				}
-				if (statement != null) {
-					statement.close();
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String query = "INSERT INTO employe (nom,telephone,email,salaire_personnalise,date_embauche,addresse,id_role,id_genre) VALUES (?,?,?,?,?,?,?,?) RETURNING id_employe";
+            statement = connection.prepareStatement(query);
+            statement.setString(1, getNom());
+            statement.setString(2, getTelephone());
+            statement.setString(3, getEmail());
+            statement.setString(4, getSalaire_personnalise());
+            statement.setDate(5, getDate_embauche());
+            statement.setString(6, getAddresse());
+            statement.setString(7, this.role.getId_role());
+            statement.setString(8, this.genre.getId_genre());
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                this.id_employe = resultSet.getString("id_employe");
+            }
+            System.out.println("Données Employe insérées avec succès");
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 	public void update(Connection connection) throws Exception {
@@ -370,5 +387,13 @@ public class Employe {
 				} catch (SQLException e) {
 				}
 		}
+	}
+
+	public Genre getGenre() {
+		return genre;
+	}
+
+	public void setGenre(Genre genre) {
+		this.genre = genre;
 	}
 }

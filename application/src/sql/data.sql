@@ -155,3 +155,12 @@ INSERT INTO commission (valeur)
 VALUES 
 (0.05);
 
+INSERT INTO genre (libelle) VALUES('Femme'),('Homme');
+
+UPDATE employe SET id_genre = 'GEN-000001' WHERE id_employe = 'EMP-000001';
+UPDATE employe SET id_genre = 'GEN-000002' WHERE id_employe = 'EMP-000002';
+UPDATE employe SET id_genre = 'GEN-000001' WHERE id_employe = 'EMP-000003';
+UPDATE employe SET id_genre = 'GEN-000002' WHERE id_employe = 'EMP-000004';
+
+-- Insert a default minimum price for commission
+INSERT INTO condition_commission (min_prix) VALUES (200000.00);

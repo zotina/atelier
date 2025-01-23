@@ -57,34 +57,47 @@ LEFT JOIN
 
 
 
-
--- commission 
-CREATE OR REPLACE VIEW vue_commission_employe AS
+-- Update the view to include commission condition
+CREATE OR REPLACE VIEW vue_commission_employe AS 
 SELECT 
     e.id_employe,
-    e.nom as nom_employe,
+    e.nom AS nom_employe,
     r.id_reparation,
-    CAST(r.date_debut AS DATE) as date_reparation,
-    r.prix as prix_reparation,
+    g.id_genre,
+    CAST(r.date_debut AS DATE) AS date_reparation,
+    r.prix AS prix_reparation,
     r.id_appareil,
-    ROUND(r.prix * (select valeur from commission), 2) as commission
-FROM employe e
-JOIN reparation_employe re ON e.id_employe = re.id_employe
-JOIN reparation r ON re.id_reparation = r.id_reparation
-WHERE r.prix IS NOT NULL
-ORDER BY e.id_employe, r.date_debut;
+    CASE 
+        WHEN r.prix >= (SELECT min_prix FROM condition_commission) 
+        THEN ROUND(r.prix * (SELECT valeur FROM commission), 2)
+        ELSE 0 
+    END AS commission
+FROM 
+    employe e 
+JOIN 
+    reparation_employe re ON e.id_employe = re.id_employe 
+JOIN 
+    reparation r ON re.id_reparation = r.id_reparation 
+JOIN 
+    genre g ON g.id_genre = e.id_genre
+WHERE 
+    r.prix IS NOT NULL
+ORDER BY 
+    e.id_employe, r.date_debut;
 
 
 CREATE OR REPLACE VIEW v_commission_employe AS
 SELECT 
     e.id_employe,
     e.nom AS nom_employe,
+    g.id_genre,
     CAST(r.date_debut AS DATE) AS date_reparation,
     ROUND(SUM(r.prix * (SELECT valeur FROM commission)), 2) AS total_commission
 FROM employe e
 JOIN reparation_employe re ON e.id_employe = re.id_employe
 JOIN reparation r ON re.id_reparation = r.id_reparation
+join genre g on g.id_genre = e.id_genre
 WHERE r.prix IS NOT NULL
-GROUP BY e.id_employe, e.nom, CAST(r.date_debut AS DATE)
+GROUP BY e.id_employe, e.nom,g.id_genre, CAST(r.date_debut AS DATE)
 ORDER BY e.id_employe, date_reparation;
 

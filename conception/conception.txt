@@ -54,6 +54,12 @@ CREATE TABLE typa(
    PRIMARY KEY(id_typa)
 );
 
+CREATE TABLE genre(
+   id_genre VARCHAR(50) ,
+   libelle VARCHAR(50)  NOT NULL,
+   PRIMARY KEY(id_genre)
+);
+
 CREATE TABLE appareil(
    id_appareil VARCHAR(50) ,
    numero_serie TEXT NOT NULL,
@@ -77,8 +83,10 @@ CREATE TABLE employe(
    salaire_personnalise VARCHAR(255) ,
    date_embauche DATE NOT NULL,
    addresse VARCHAR(255) ,
+   id_genre VARCHAR(50)  NOT NULL,
    id_role VARCHAR(50)  NOT NULL,
    PRIMARY KEY(id_employe),
+   FOREIGN KEY(id_genre) REFERENCES genre(id_genre),
    FOREIGN KEY(id_role) REFERENCES role(id_role)
 );
 
