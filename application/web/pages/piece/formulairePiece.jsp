@@ -70,6 +70,10 @@
 							<% } %>
 						</select>
 					</div>
+					<div class="form-group">
+						<label for="date_changement_prix">Date_changement_prix</label>
+						<input type="date" class="form-control" id="date_changement_prix" name="date_changement_prix" value="<%= (piece != null && piece.getDate_changement_prix() != null) ? piece.getDate_changement_prix() : "" %>">
+					</div>
 					<input type="hidden" name="action" value="<%= (request.getAttribute("action") == null) ? "insert" : ("handleUpdate".equals(request.getAttribute("action")) ? "update" : "insert") %>">
 					<button type="submit" class="btn btn-primary"><%= (request.getAttribute("action") == null) ? "Insert" : ("handleUpdate".equals(request.getAttribute("action")) ? "Update" : "Insert") %></button>
 				</form>

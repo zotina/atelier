@@ -103,6 +103,7 @@ public class TraitementRetourServlet extends HttpServlet {
     private void searchByTypeAndCategorie(HttpServletRequest request, HttpServletResponse response, Connection connection) throws Exception {
         String type = request.getParameter("type");
         String categorie = request.getParameter("categorie");
+        String date = request.getParameter("date");
 
         if (type == null || type.isEmpty() || categorie == null || categorie.isEmpty()) {
             request.setAttribute("error", "Veuillez fournir un type et une catégorie.");
@@ -110,7 +111,7 @@ public class TraitementRetourServlet extends HttpServlet {
             return;
         }
 
-        List<Retour> retourList = Retour.getByTypeAndCategory(connection, type, categorie);
+        List<Retour> retourList = Retour.getByTypeAndCategory(connection, type, categorie,date);
         request.setAttribute("retourList", retourList);
         request.setAttribute("type", type);
         request.setAttribute("categorie", categorie);

@@ -329,7 +329,9 @@ public class Employe {
 				instance.setDate_embauche(resultSet.getDate("date_embauche"));
 				instance.setAddresse(resultSet.getString("addresse"));
 				Role role = Role.getById(resultSet.getString("id_role"), connection);
+				Genre genre = Genre.getById(resultSet.getString("id_genre"), connection);
 				instance.setRole(role);
+				instance.setGenre(genre);
 				liste.add(instance);
 			}
 			return liste;
@@ -368,8 +370,10 @@ public class Employe {
 				instance.setSalaire_personnalise(resultSet.getString("salaire_personnalise"));
 				instance.setDate_embauche(resultSet.getDate("date_embauche"));
 				instance.setAddresse(resultSet.getString("addresse"));
+				Genre genre = Genre.getById(resultSet.getString("id_genre"), connection);
 				Role role = Role.getById(resultSet.getString("id_role"), connection);
 				instance.setRole(role);
+				instance.setGenre(genre);
 			}
 			return instance;
 		} catch (SQLException e) {

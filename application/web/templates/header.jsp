@@ -186,6 +186,11 @@
                         </a>
                     </li>
                     <li>
+                        <a href="TraitementHisto_pieceServlet">
+                            <i class="bi bi-circle"></i><span>historique</span>
+                        </a>
+                    </li>
+                    <li>
                         <a href="TraitementPieceServlet?action=form">
                             <i class="bi bi-circle"></i><span>Ajout</span>
                         </a>

@@ -183,20 +183,21 @@ CREATE TABLE reparation_employe(
    FOREIGN KEY(id_employe) REFERENCES employe(id_employe)
 );
 
-CREATE TABLE reparation_reel(
-   id_reparation_reel VARCHAR(50), 
-   id_reparation VARCHAR(50) ,
-   id_piece VARCHAR(50) ,
-   quantite INTEGER NOT NULL,
-   date_sortie DATE,
-   PRIMARY KEY(id_reparation_reel),
-   FOREIGN KEY(id_reparation) REFERENCES reparation(id_reparation),
-   FOREIGN KEY(id_piece) REFERENCES piece(id_piece)
-);
+   CREATE TABLE reparation_reel(
+      id_reparation_reel VARCHAR(50), 
+      id_reparation VARCHAR(50) ,
+      id_piece VARCHAR(50) ,
+      quantite INTEGER NOT NULL,
+      date_sortie DATE,
+      PRIMARY KEY(id_reparation_reel),
+      FOREIGN KEY(id_reparation) REFERENCES reparation(id_reparation),
+      FOREIGN KEY(id_piece) REFERENCES piece(id_piece)
+   );
 
 CREATE TABLE commission(
    id_commission SERIAL,
-   valeur NUMERIC(15,2) NOT NULL
+   valeur NUMERIC(15,2) NOT NULL,
+   date_changement date
 );
 
 
@@ -210,11 +211,42 @@ ALTER TABLE employe
 ADD COLUMN id_genre VARCHAR(50),
 ADD CONSTRAINT fk_genre FOREIGN KEY (id_genre) REFERENCES genre(id_genre);
 
-
--- commission 
--- Create condition_commission table
 CREATE TABLE condition_commission (
-    min_prix NUMERIC(15,2)
+   min_prix NUMERIC(15,2),
+   date_changement date
 );
 
+ALTER TABLE piece
+ADD COLUMN date_changement_prix DATE DEFAULT CURRENT_DATE;
 
+
+CREATE TABLE histo_piece (
+    id_histo VARCHAR(50) PRIMARY KEY,
+    id_piece VARCHAR(50) NOT NULL,
+    prix_unitaire NUMERIC(15,2) NOT NULL,
+    change_type VARCHAR(10) NOT NULL,
+    changed_at DATE DEFAULT CURRENT_DATE NOT NULL,
+    changed_by VARCHAR(100),
+    FOREIGN KEY (id_piece) REFERENCES piece(id_piece) ON DELETE CASCADE
+);
+
+CREATE OR REPLACE FUNCTION trg_piece_history() RETURNS TRIGGER AS $$
+BEGIN
+    IF TG_OP = 'INSERT' THEN
+        INSERT INTO histo_piece (id_piece, prix_unitaire, change_type, changed_by, changed_at)
+        VALUES (NEW.id_piece, NEW.prix_unitaire, 'INSERT', current_user, COALESCE(NEW.date_changement_prix, CURRENT_DATE));
+    ELSIF TG_OP = 'UPDATE' THEN
+        INSERT INTO histo_piece (id_piece, prix_unitaire, change_type, changed_by, changed_at)
+        VALUES (NEW.id_piece, NEW.prix_unitaire, 'UPDATE', current_user, COALESCE(NEW.date_changement_prix, CURRENT_DATE));
+    ELSIF TG_OP = 'DELETE' THEN
+        INSERT INTO histo_piece (id_piece, prix_unitaire, change_type, changed_by, changed_at)
+        VALUES (OLD.id_piece, OLD.prix_unitaire, 'DELETE', current_user, COALESCE(OLD.date_changement_prix, CURRENT_DATE));
+    END IF;
+    RETURN NULL;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_piece_history
+AFTER INSERT OR UPDATE OR DELETE ON piece
+FOR EACH ROW
+EXECUTE FUNCTION trg_piece_history();

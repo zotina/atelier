@@ -68,14 +68,14 @@
                                         <td><%= commission.getReparation().getId_reparation() %></td>
                                         <td><%= commission.getReparation().getAppareil().getLibelle() %></td>
                                         <td><%= commission.getReparation().getDate_debut() %></td>
-                                        <td><%= String.format("%,.2f", commission.getReparation().getPrix()) %> €</td>
-                                        <td><%= String.format("%,.2f", commission.getCommission()) %> €</td>
+                                        <td><%= String.format("%,.2f", commission.getReparation().getPrix()) %> Ar</td>
+                                        <td><%= String.format("%,.2f", commission.getCommission()) %> Ar</td>
                                     </tr>
                                 <% } %>
                                 <!-- Ligne pour le total -->
                                 <tr class="table-info">
                                     <td colspan="4"><strong>Total des commissions</strong></td>
-                                    <td><strong><%= String.format("%,.2f", totalCommission) %> €</strong></td>
+                                    <td><strong><%= String.format("%,.2f", totalCommission) %> Ar</strong></td>
                                 </tr>
                             <% } %>
                         </tbody>

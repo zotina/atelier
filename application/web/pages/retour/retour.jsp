@@ -49,6 +49,11 @@
                         <% } %>
                     <% } %>
                 </select>
+
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" >
+                </div>
                 
                 <button type="submit">Rechercher</button>
             </form>

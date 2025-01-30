@@ -96,7 +96,8 @@ public class FormActionPieceServlet extends HttpServlet {
 			Typa id_typaObj = Typa.getById(id_typa,connection);
 			String id_marque = request.getParameter("id_marque");
 			Marque id_marqueObj = Marque.getById(id_marque,connection);
-			Piece piece = new Piece(id_piece, numero_serie, prix_unitaire, reference, description, id_categorieObj, id_typaObj, id_marqueObj);
+			Date date_changement_prix = Date.valueOf(request.getParameter("date_changement_prix"));
+			Piece piece = new Piece(id_piece, numero_serie, prix_unitaire, reference, description, id_categorieObj, id_typaObj, id_marqueObj, date_changement_prix);
 			piece.insert(connection);
 			forwardRequest(request, response, "TraitementPieceServlet");
 		} catch (Exception e) {
@@ -117,7 +118,8 @@ public class FormActionPieceServlet extends HttpServlet {
 			Typa id_typaObj = Typa.getById(id_typa,connection);
 			String id_marque = request.getParameter("id_marque");
 			Marque id_marqueObj = Marque.getById(id_marque,connection);
-			Piece piece = new Piece(id_piece, numero_serie, prix_unitaire, reference, description, id_categorieObj, id_typaObj, id_marqueObj);
+			Date date_changement_prix = Date.valueOf(request.getParameter("date_changement_prix"));
+			Piece piece = new Piece(id_piece, numero_serie, prix_unitaire, reference, description, id_categorieObj, id_typaObj, id_marqueObj, date_changement_prix);
 			piece.update(connection);
 			forwardRequest(request, response, "TraitementPieceServlet");
 		} catch (Exception e) {

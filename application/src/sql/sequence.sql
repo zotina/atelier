@@ -19,7 +19,18 @@ CREATE SEQUENCE IF NOT EXISTS seq_reparation_reel START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_retour START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_recommandation START 1;
 CREATE SEQUENCE IF NOT EXISTS seq_genre START 1;
+CREATE SEQUENCE IF NOT EXISTS seq_histo_prix_rep START 1;
+CREATE SEQUENCE IF NOT EXISTS seq_histo_prix_piece START 1;
 
+
+CREATE OR REPLACE FUNCTION generate_id_seq_hito_piece()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.id_histo := 'HISTO_PIECE-' || LPAD(NEXTVAL('seq_histo_prix_piece')::TEXT, 6, '0'); 
+   RETURN NEW;
+END;
+$$
+ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION generate_id_seq_genre()
 RETURNS TRIGGER AS $$
@@ -201,6 +212,16 @@ END;
 $$
  LANGUAGE plpgsql;  
 
+
+CREATE TRIGGER trig_histo_piece_id
+BEFORE INSERT ON histo_piece  
+FOR EACH ROW  
+EXECUTE FUNCTION generate_id_seq_hito_piece(); 
+
+CREATE TRIGGER trig_histo_rep_id
+BEFORE INSERT ON histo_reparation  
+FOR EACH ROW  
+EXECUTE FUNCTION generate_id_seq_hito_rep(); 
 
 CREATE TRIGGER trig_genre_id
 BEFORE INSERT ON genre  

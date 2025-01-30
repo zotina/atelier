@@ -56,8 +56,6 @@ LEFT JOIN
     categorie cat ON rep.id_categorie = cat.id_categorie;
 
 
-
--- Update the view to include commission condition
 CREATE OR REPLACE VIEW vue_commission_employe AS 
 SELECT 
     e.id_employe,
@@ -86,18 +84,46 @@ ORDER BY
     e.id_employe, r.date_debut;
 
 
-CREATE OR REPLACE VIEW v_commission_employe AS
-SELECT 
-    e.id_employe,
-    e.nom AS nom_employe,
-    g.id_genre,
-    CAST(r.date_debut AS DATE) AS date_reparation,
-    ROUND(SUM(r.prix * (SELECT valeur FROM commission)), 2) AS total_commission
-FROM employe e
-JOIN reparation_employe re ON e.id_employe = re.id_employe
-JOIN reparation r ON re.id_reparation = r.id_reparation
-join genre g on g.id_genre = e.id_genre
-WHERE r.prix IS NOT NULL
-GROUP BY e.id_employe, e.nom,g.id_genre, CAST(r.date_debut AS DATE)
-ORDER BY e.id_employe, date_reparation;
+CREATE OR REPLACE FUNCTION get_total_prix_pieces(date_filtre DATE, id_appareil_filtre VARCHAR(50))
+RETURNS NUMERIC(15,2) AS $$
+DECLARE
+    total_prix NUMERIC(15,2) := 0;
+    prix_historique NUMERIC(15,2);
+    prix_actuel NUMERIC(15,2);
+    quantite_piece INTEGER;
+    id_piece_filtre VARCHAR(50);
+BEGIN
+    -- Boucle sur toutes les réparations liées à l'appareil
+    FOR id_piece_filtre, quantite_piece IN
+        SELECT rr.id_piece, rr.quantite
+        FROM reparation_reel rr
+        JOIN reparation r ON rr.id_reparation = r.id_reparation
+        WHERE r.id_appareil = id_appareil_filtre
+    LOOP
+        -- Vérifier s'il y a un historique pour la date spécifiée
+        SELECT hp.prix_unitaire INTO prix_historique
+        FROM histo_piece hp
+        WHERE hp.id_piece = id_piece_filtre
+          AND hp.changed_at <= date_filtre
+        ORDER BY hp.changed_at DESC
+        LIMIT 1;
 
+        -- Si un historique est trouvé, utiliser ce prix
+        IF FOUND THEN
+            total_prix := total_prix + (prix_historique * quantite_piece);
+        ELSE
+            -- Sinon, utiliser le prix actuel de la table `piece`
+            SELECT p.prix_unitaire INTO prix_actuel
+            FROM piece p
+            WHERE p.id_piece = id_piece_filtre;
+
+            IF FOUND THEN
+                total_prix := total_prix + (prix_actuel * quantite_piece);
+            END IF;
+        END IF;
+    END LOOP;
+
+    -- Retourner le total_prix
+    RETURN total_prix;
+END;
+$$ LANGUAGE plpgsql;

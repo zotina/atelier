@@ -17,6 +17,7 @@
                                 <h5 class="card-title">Informations générales</h5>
                                 <p><strong>ID Employé :</strong> <%= employe.getId_employe() != null ? employe.getId_employe() : "Non spécifié" %></p>
                                 <p><strong>Nom :</strong> <%= employe.getNom() != null ? employe.getNom() : "Non spécifié" %></p>
+                                <p><strong>Genre :</strong> <%= employe.getGenre() != null ? employe.getGenre().getLibelle() : "Non spécifié" %></p>
                                 <h5 class="card-title mt-4">Informations personnelles</h5>
                                 <p><strong>Téléphone :</strong> <%= employe.getTelephone() != null ? employe.getTelephone() : "Non spécifié" %></p>
                                 <p><strong>Email :</strong> <%= employe.getEmail() != null ? employe.getEmail() : "Non spécifié" %></p>

@@ -15,7 +15,7 @@ public class Retour{
 	Date date_retour;
 	Appareil appareil ;
 
-    public static List<Retour> getByTypeAndCategory(Connection connection, String id_type, String categorie) throws Exception {
+    public static List<Retour> getByTypeAndCategory(Connection connection, String id_type, String categorie,String date) throws Exception {
         List<Retour> retours = new ArrayList<>();
         StringBuilder queryBuilder = new StringBuilder();
         queryBuilder.append("SELECT DISTINCT * FROM v_getretours WHERE 1=1 ");
@@ -47,7 +47,7 @@ public class Retour{
                     Retour instance = new Retour();
                     instance.setId_retour(resultSet.getString("id_retour"));
                     instance.setPrix_total_main_doeuvre(resultSet.getDouble("prix_total_main_doeuvre"));
-                    instance.setPrix_total_piece(resultSet.getDouble("prix_total_piece"));
+                    instance.setPrix_total_piece(instance.getTotalPrixPieces(connection,date));
                     instance.setDate_retour(resultSet.getString("date_retour"));
                     Appareil appareil = Appareil.getById(resultSet.getString("id_appareil"),connection);
                     instance.setAppareil(appareil);
@@ -58,7 +58,23 @@ public class Retour{
         return retours;
     }
     
-    
+    public  double getTotalPrixPieces(Connection connection, String date_filtre) throws SQLException {
+        double totalPrix = 0.0;
+        String query = "SELECT get_total_prix_pieces(?, ?) AS total_prix";
+
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, date_filtre);
+            statement.setString(2, this.appareil.id_appareil);
+
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    totalPrix = resultSet.getDouble("total_prix");
+                }
+            }
+        }
+
+        return totalPrix;
+    }
 
 	public Retour(){
 	}
