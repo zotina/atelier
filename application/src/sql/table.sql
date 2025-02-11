@@ -212,6 +212,7 @@ ADD COLUMN id_genre VARCHAR(50),
 ADD CONSTRAINT fk_genre FOREIGN KEY (id_genre) REFERENCES genre(id_genre);
 
 CREATE TABLE condition_commission (
+   id_condition_commission SERIAL,
    min_prix NUMERIC(15,2),
    date_changement date
 );
